@@ -3,7 +3,6 @@ import {listEmployees} from "../services/EmployeeService.js";
 
 const ListEmployeeComponent = () => {
 
-
     const [employees, setEmployees] = useState([])
 
     useEffect(() => {
