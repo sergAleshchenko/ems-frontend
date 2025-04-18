@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {listEmployees} from "../services/EmployeeService.js";
+import EmployeeService from "../services/EmployeeService";
+import {Link} from "react-router-dom";
 
 const ListEmployeeComponent = () => {
 
     const [employees, setEmployees] = useState([])
 
     useEffect(() => {
-        listEmployees().then((response) => {
+        EmployeeService.getAllEmployees().then((response) => {
             setEmployees(response.data);
         }).catch(error => {
             console.error(error);
@@ -18,6 +19,7 @@ const ListEmployeeComponent = () => {
         <div className='container'>
 
             <h2 className='text-center'>List of Employees</h2>
+            <Link to = "/add-employee" className = "btn btn-primary mb-2">Add Employee</Link>
             <table className='table table-striped table-bordered'>
                 <thead>
                     <tr>
@@ -25,6 +27,7 @@ const ListEmployeeComponent = () => {
                         <th>Employee First Name</th>
                         <th>Employee Last Name</th>
                         <th>Employee Email Id</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +38,9 @@ const ListEmployeeComponent = () => {
                             <td>{employee.firstName}</td>
                             <td>{employee.lastName}</td>
                             <td>{employee.email}</td>
+                            <td>
+                                <Link className="btn btn-info" to={`/edit-employee/${employee.id}`}>Update</Link>
+                            </td>
                         </tr>
                     )
                 }
