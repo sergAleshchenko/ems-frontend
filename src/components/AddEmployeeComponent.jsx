@@ -31,6 +31,7 @@ const AddEmployeeComponent = () => {
     }
 
     useEffect(() => {
+        if (!id) return;
         EmployeeService.getEmployeeById(id).then((response) => {
             setFirstName(response.data.firstName)
             setLastName(response.data.lastName)
@@ -38,7 +39,7 @@ const AddEmployeeComponent = () => {
         }).catch(error => {
             console.log(error)
         })
-    }, [])
+    }, [id])
 
 
     const title = () => {

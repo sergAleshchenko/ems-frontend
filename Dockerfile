@@ -1,20 +1,10 @@
-# ------------------------
-# Step 1: Build react app
-# ------------------------
-
-# Use node:latest as the builder image
-FROM node:latest AS builder
-
+FROM node:22-alpine AS build
 WORKDIR /app
-COPY package.json .
-RUN npm install
-COPY . ./
+COPY package*.json ./
+RUN npm ci
+COPY . .
 RUN npm run build
-FROM nginx:latest
-RUN rm -rf /etc/nginx/conf.d/default.conf
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
-WORKDIR /usr/share/nginx/html
-
-EXPOSE 3000
-CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]
+FROM nginx:stable-alpine
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
